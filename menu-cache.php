@@ -26,7 +26,7 @@ function return_cached_menu($nav_menu, $args = array()){
 	{
 	$menu_name="menu_".$menu_id;
 	}
-	// Get the nav menu based on the requested menu
+	// Get the nav menu based on the requested menu.
 	elseif($args->menu !="")
 	{
 	$menu_name="menu_".$args->menu;
