@@ -9,11 +9,14 @@ Version: 1.2
 */
 
 
+require_once dirname( __FILE__ ) . '/option-page.php';
+
 if(!class_exists('WP_Nav_Menu_Cache')): 
 	class WP_Nav_Menu_Cache{
 		
-		public $settings; // WeDevs_Settings_API object
+		//public $settings; // WeDevs_Settings_API object
 		private $_cache_dir; //string of dir path with forward slash
+		public  $options;
 		 
 		public function __construct(){
 			
@@ -24,7 +27,8 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 				{
 					mkdir($this->_cache_dir);
 				}
-			
+			$this->options =  get_option('wp_nav_menu_cache');
+			//write_log("options: ");write_log($this->options);
 			//action and filters
 			add_filter("pre_wp_nav_menu", array($this, "return_cached_menu"), 100,2);
 
@@ -48,7 +52,12 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 		  */		
 			
 		private function _get_filename_from_arg($args){
-		
+			
+			#check the theme location is excluded or not 
+			if($args->theme_location !="" && isset($this->options['exclude_theme_locations'][$args->theme_location])){ 
+			return false;
+			}
+			
 			$menu = "";
 			$menu_name="menu_first";
 			
