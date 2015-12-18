@@ -32,52 +32,95 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 			//action and filters
 			add_filter("pre_wp_nav_menu", array($this, "return_cached_menu"), 100,2);
 
-			add_filter("wp_nav_menu", array($this, "save_cached_nav_menu"), 100, 2);
+			add_filter("wp_nav_menu", array($this, "save_menu"), 100, 2);
 			add_action("wp_update_nav_menu", array($this, "update_cached_nav_menu"), 100, 1);
 			//add_action("wp_update_nav_menu_item", "update_cached_nav_menu", 10, 1);
 		}
 		
 		/**
-		  *Returns filename of cached filename based on given args
+		  *Determines and Returns file path of cached file based on given args
 		  *@param $args object
 		  	$args is an object
-			$args->menu  
-			defined by user in theme file
-			is (string) (optional) The menu that is desired; accepts (matching in order) id, slug, name . Default: None 
-			when user gave blank or by default none then this function receives 
-			*** $args->menu is blank
-			but with wp_nav_menu filter 
-			*** $args->menu is an object of WP_Term
+			$args has a property $menu , it store different type of data based on when, where and by whom it is assigned.
+			$args->menu value is Assigned by 
+				1. User in theme file
+					is (string) (optional) The menu that is desired; accepts (matching in order) id, slug, name . Default: None 
+				2. Custom Menus widget function
+				
+				
+			We receive Value of $args->menu different in called filter
+				IN FUNCTION return_cached_menu IN CALL OF pre_wp_nav_menu FILTER
+				1. BLANK - When user gave blank or by default none IN function wp_nav_menu() 
+				2. STRING - (id, slug, name) When user gave IN function wp_nav_menu() 
+				3. OBJECT of WP_Term - When menu is calld by Custom Menu widget
+				
+				IN FUNCTION save_menu IN CALL OF wp_nav_menu FILTER
+				1. OBJECT of WP_Term - When user gave blank or by default none IN function wp_nav_menu()  
+				2. STRING - (id, slug, name) When user gave IN function wp_nav_menu() 
+				3. OBJECT of WP_Term - When menu is calld by Custom Menu widget
+			
+			    MENU OBJECT
+				[menu] => WP_Term Object
+					(
+						[term_id] => 2
+						[name] => Menu 1
+						[slug] => menu-1
+						[term_group] => 0
+						[term_taxonomy_id] => 2
+						[taxonomy] => nav_menu
+						[description] => 
+						[parent] => 0
+						[count] => 4
+						[filter] => raw
+					)	 
+
 			*** we can not use $args->menu objet data here, because pre_wp_nav_menu filter does not pass this object to detect the file name.
 		  */		
 			
-		private function _get_filename_from_arg($args){
+		private function _get_cached_file_path($args){
+			//write_log('_get_cached_file_path');
 			
 			#check the theme location is excluded or not 
 			if($args->theme_location !="" && isset($this->options['exclude_theme_locations'][$args->theme_location])){ 
 			return false;
 			}
 			
-			$menu = "";
-			$menu_name="menu_first";
-			
-			if(!is_object($args->menu)){ //when user gave blank or by default none then this function receives $args->menu is an object of WP_Term
-			$menu=$args->menu;	
-			}
-			
-			// Get the nav menu based on the requested menu.
-			if($menu !="")
+			$menu_id_slug_name="";
+			#check $args->menu is object or string
+			if(is_object($args->menu))
 			{
-			$menu_name="menu_".$args->menu;
+				#take menu id from object
+				$menu_id_slug_name=$args->menu->term_id;
+				
+				#meke the object to blank string
+				$args->menu="";
+			
 			}
-			// Get the nav menu based on the theme_location
-			elseif($args->theme_location !="")
+			else
 			{
-			$menu_name="menu_".$args->theme_location;	
+				$menu_id_slug_name=$args->menu;
 			}
 			
-			$filename=$this->_cache_dir.$menu_name.".html";
-			return $filename;	
+			#if we get $menu_id_slug_name , check is that excluded
+			#in optoins excluded memu item strored id , slug and name all together seperated by pipe(|) AS array key and value.  "id|slug|name" = > "id|slug|name"
+			if($menu_id_slug_name != "" && isset($this->options['exclude_menus']) && is_array($this->options['exclude_menus']))
+			{
+				$exclude_menus=$this->options['exclude_menus'];
+				foreach($exclude_menus as $key=>$val){
+					$ar=explode("|", $key);
+					if($ar[0] == $menu_id_slug_name ) return false;
+					if($ar[1] == $menu_id_slug_name ) return false;
+					if($ar[2] == $menu_id_slug_name ) return false;
+				}
+			}
+			
+			#make the filename based on $args
+			$filename = md5( var_export( $args, true ) );
+			#if we want different cache file for different page of site then do following
+			//$filename = md5( $_SERVER['REQUEST_URI'] . var_export( $args, true ) )."html";
+									
+			return $this->_cache_dir.$filename.".html";
+			
 		
 		}
 		
@@ -92,7 +135,7 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 		//write_log ( 'return_cached_menu' );
 		//write_log ( $args );
 			
-			$file = $this->_get_filename_from_arg($args);
+			$file = $this->_get_cached_file_path($args);
 			
 			if($file === false) {return $nav_menu;}
 			
@@ -107,23 +150,23 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 
 		
 		/**
-		  *Save nave menu data to file
+		  *Save nav menu data to file
 		  *@param $nav_menu string
 		  *@param $arrgs object
 		**/	
 		
-		public function save_cached_nav_menu($nav_menu,$args){
+		public function save_menu($nav_menu,$args){
 		
 		
-		//write_log ( 'save_cached_nav_menu' );
+		//write_log ( 'save_menu' );
 		//write_log ( $args );
 			
-			$file = $this->_get_filename_from_arg($args);
-			
+			$file = $this->_get_cached_file_path($args);
+		//write_log ( $file );	
 			if($file === false) {return $nav_menu;}
-			
+			//write_log ( 'saving........' );
 			$fp=fopen($file, "w");
-			fwrite($fp, $nav_menu);
+			fwrite($fp, "\n<!--Start Nav Menu Served by WP Nav Menu Cache-->\n".$nav_menu."\n<!--End Nav Menu Served by WP Nav Menu Cache-->\n");
 			fclose($fp);
 			return $nav_menu;
 		}	

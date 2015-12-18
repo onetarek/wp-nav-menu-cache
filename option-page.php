@@ -34,8 +34,8 @@ class WP_Nav_Menu_Cache_Settings {
         $sections = array(
             array(
                 'id' => 'wp_nav_menu_cache',
-                'title' => 'WP Nav Menu Cache Settings',
-				'desc' => "Choose your options and click Save Change"
+                'title' => '', //WP Nav Menu Cache Settings
+				'desc' => ""
             ),
         );
         return $sections;
@@ -64,16 +64,33 @@ class WP_Nav_Menu_Cache_Settings {
 		foreach($locations as $key => $val){
 			$exclude_theme_locations_opt[$key]=ucfirst($key);
 		}
+		
+		// Get menus
+		$menus = wp_get_nav_menus();
+		//write_log($menus);
+		$exclude_menus_opt=array();
+		foreach($menus as $menu){
+			$exclude_menus_opt[$menu->term_id."|".$menu->slug."|".$menu->name]=$menu->name;	
+		}
+		
         $settings_fields = array(
             'wp_nav_menu_cache' => array(
 
                 array(
                     'name'    => 'exclude_theme_locations',
                     'label'   => 'Exclude Theme Location',
-                    'desc'    => "Check wich menu of theme location you don't want to cache",
+                    'desc'    => "Check theme location you don't want to cache any menu of",
                     'type'    => 'multicheck',
                     'options' => $exclude_theme_locations_opt
                 ),
+                array(
+                    'name'    => 'exclude_menus',
+                    'label'   => 'Exclude Menus',
+                    'desc'    => "Check wich menu you don't want to cache.<br>You need this if you use Custom Menu widget or if you assign a menu with the call of wp_nav_menu() function in theme files.",
+                    'type'    => 'multicheck',
+                    'options' => $exclude_menus_opt
+                ),				
+				
 
             ),
 			
@@ -85,7 +102,7 @@ class WP_Nav_Menu_Cache_Settings {
 
     function plugin_page() {
         echo '<div class="wrap">';
-
+		echo '<h2>WP Nav Menu Cache</h2>';
         $this->settings_api->show_navigation();
         $this->settings_api->show_forms();
 
