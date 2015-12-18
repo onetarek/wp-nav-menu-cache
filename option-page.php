@@ -1,8 +1,6 @@
-<?php
+<?php 
 # admin page
 require_once dirname( __FILE__ ) . '/class.settings-api.php';
-#https://github.com/tareq1988/wordpress-settings-api-class
-#http://tareq.co/2012/06/wordpress-settings-api-php-class/
 
 if ( !class_exists('WP_Nav_Menu_Cache_Settings' ) ):
 class WP_Nav_Menu_Cache_Settings {
@@ -59,7 +57,6 @@ class WP_Nav_Menu_Cache_Settings {
 				
 			)
 		*/	
-		//write_log($locations);
 		$exclude_theme_locations_opt=array();
 		foreach($locations as $key => $val){
 			$exclude_theme_locations_opt[$key]=ucfirst($key);
@@ -67,7 +64,6 @@ class WP_Nav_Menu_Cache_Settings {
 		
 		// Get menus
 		$menus = wp_get_nav_menus();
-		//write_log($menus);
 		$exclude_menus_opt=array();
 		foreach($menus as $menu){
 			$exclude_menus_opt[$menu->term_id."|".$menu->slug."|".$menu->name]=$menu->name;	
@@ -93,7 +89,7 @@ class WP_Nav_Menu_Cache_Settings {
                 array(
                     'name'  => 'individual_url',
                     'label' => 'Cache for Individual URL',
-                    'desc'  => 'Enable <br><span style="color:#ff0000">You should not enable this option if you have a huge number of <strong>posts/pages</strong> on your site.<br>This option caches each menu individually <strong>for each post/page or any vidited url</strong>.<br>This can result in a <strong>huge number of cached menu files</strong> on your site, which could actually resulted in a <strong>slower site</strong>.<br>It could also cross the <strong>limitation of number of files</strong> in a single directory.</span>',
+                    'desc'  => 'Enable <br><span style="color:#ff0000">You should not enable this option if you have a huge number of <strong>posts/pages</strong> on your site.<br>This option caches each menu individually <strong>for each post/page or any visited url</strong>.<br>This can result in a <strong>huge number of cached menu files</strong> on your site, which could actually resulted in a <strong>slower site</strong>.<br>It could also cross the <strong>limitation of number of files</strong> in a single directory.</span>',
                     'type'  => 'checkbox'
                 ),				
 

@@ -5,7 +5,7 @@ Description: Create cache for dynamically generated navigation menu HTML and ser
 Plugin URI: http://onetarek.com/my-wordpress-plugins/wp-nav-menu-cache/
 Author: oneTarek
 Author URI: http://onetarek.com
-Version: 1.2
+Version: 2.0
 */
 
 
@@ -14,7 +14,6 @@ require_once dirname( __FILE__ ) . '/option-page.php';
 if(!class_exists('WP_Nav_Menu_Cache')): 
 	class WP_Nav_Menu_Cache{
 		
-		//public $settings; // WeDevs_Settings_API object
 		private $_cache_dir; //string of dir path with forward slash
 		public  $options;
 		 
@@ -28,7 +27,6 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 					mkdir($this->_cache_dir);
 				}
 			$this->options =  get_option('wp_nav_menu_cache');
-			//write_log("options: ");write_log($this->options);
 			//action and filters
 			add_filter("pre_wp_nav_menu", array($this, "return_cached_menu"), 100,2);
 
@@ -80,7 +78,6 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 		  */		
 			
 		private function _get_cached_file_path($args){
-			//write_log('_get_cached_file_path');
 			
 			#check the theme location is excluded or not 
 			if($args->theme_location !="" && isset($this->options['exclude_theme_locations'][$args->theme_location])){ 
@@ -139,9 +136,6 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 		 **/
 		
 		public function return_cached_menu($nav_menu, $args ){
-	
-		//write_log ( 'return_cached_menu' );
-		//write_log ( $args );
 			
 			$file = $this->_get_cached_file_path($args);
 			
@@ -164,15 +158,9 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 		**/	
 		
 		public function save_menu($nav_menu,$args){
-		
-		
-		//write_log ( 'save_menu' );
-		//write_log ( $args );
 			
 			$file = $this->_get_cached_file_path($args);
-		//write_log ( $file );	
 			if($file === false) {return $nav_menu;}
-			//write_log ( 'saving........' );
 			$fp=fopen($file, "w");
 			fwrite($fp, "\n<!--Start Nav Menu Served by WP Nav Menu Cache-->\n".$nav_menu."\n<!--End Nav Menu Served by WP Nav Menu Cache-->\n");
 			fclose($fp);
