@@ -115,9 +115,15 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 			}
 			
 			#make the filename based on $args
-			$filename = md5( var_export( $args, true ) );
-			#if we want different cache file for different page of site then do following
-			//$filename = md5( $_SERVER['REQUEST_URI'] . var_export( $args, true ) )."html";
+			#chek we want different cache file for different page
+			if(isset($this->options['individual_url']))
+			{
+				$filename = md5( $_SERVER['REQUEST_URI'] . var_export( $args, true ) );
+			}
+			else
+			{
+				$filename = md5( var_export( $args, true ) );
+			}
 									
 			return $this->_cache_dir.$filename.".html";
 			

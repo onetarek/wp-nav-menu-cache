@@ -90,7 +90,12 @@ class WP_Nav_Menu_Cache_Settings {
                     'type'    => 'multicheck',
                     'options' => $exclude_menus_opt
                 ),				
-				
+                array(
+                    'name'  => 'individual_url',
+                    'label' => 'Cache for Individual URL',
+                    'desc'  => 'Enable <br><span style="color:#ff0000">You should not enable this option if you have a huge number of <strong>posts/pages</strong> on your site.<br>This option caches each menu individually <strong>for each post/page or any vidited url</strong>.<br>This can result in a <strong>huge number of cached menu files</strong> on your site, which could actually resulted in a <strong>slower site</strong>.<br>It could also cross the <strong>limitation of number of files</strong> in a single directory.</span>',
+                    'type'  => 'checkbox'
+                ),				
 
             ),
 			

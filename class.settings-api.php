@@ -1,4 +1,7 @@
 <?php
+#https://github.com/tareq1988/wordpress-settings-api-class
+#http://tareq.co/2012/06/wordpress-settings-api-php-class/
+#oneTarek did a simple modification of this file from original git
 
 /**
  * weDevs Settings API wrapper class
