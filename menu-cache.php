@@ -5,7 +5,7 @@ Description: Create cache for dynamically generated navigation menu HTML and ser
 Plugin URI: http://onetarek.com/my-wordpress-plugins/wp-nav-menu-cache/
 Author: oneTarek
 Author URI: http://onetarek.com
-Version: 2.0
+Version: 2.1
 */
 
 
@@ -115,7 +115,7 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 			
 			#make the filename based on $args
 			#chek we want different cache file for different page
-			if(isset($this->options['individual_url']))
+			if(isset($this->options['individual_url']) && $this->options['individual_url']=='on')
 			{
 				$filename = md5( $_SERVER['REQUEST_URI'] . var_export( $args, true ) );
 			}

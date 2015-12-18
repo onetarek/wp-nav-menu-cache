@@ -4,7 +4,7 @@ Donate link: http://wpadguru.com
 Tags: cache, caching, performance, web performance optimization, wp-cache, page speed, quick cache, cache dynamic menu, navigation menu, wp nav menu, reduce query, static menu, wordpress optimization tool
 Requires at least: 3.8.0
 Tested up to: 4.4.0
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Just Install and activate. So nothing to see after installation. To see result s
 1. Settings Page
 
 == Changelog ==
+= 2.1 =
+* Bug Fix: The option "Cache for Individual URL" was getting set automatically on some sites.
+
 = 2.0 =
 * Feature Added: A Settings page
 * Feature Added: Exclude any theme location from caching you don't want to cache any menu of.
@@ -55,6 +58,9 @@ Just Install and activate. So nothing to see after installation. To see result s
 
 
 == Upgrade Notice ==
+= 2.1 =
+* Bug Fix: The option "Cache for Individual URL" was getting set automatically on some sites.
+
 = 2.0 =
 * New Feature Added: (1)A Settings page. (2)Exclude any theme location from caching you don't want to cache any menu of. (3)Exclude any menu you don't want to cache. (4)Feature Added: Choose wheather this plugin will cache each menu individually for each post/page or any visited url. (5)Delete all cached menu files from setting page. (6)Delete all cached files on plugin activation.
 

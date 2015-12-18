@@ -74,7 +74,7 @@ class WP_Nav_Menu_Cache_Settings {
 
                 array(
                     'name'    => 'exclude_theme_locations',
-                    'label'   => 'Exclude Theme Location',
+                    'label'   => 'Exclude Theme Locations',
                     'desc'    => "Check theme location you don't want to cache any menu of",
                     'type'    => 'multicheck',
                     'options' => $exclude_theme_locations_opt
