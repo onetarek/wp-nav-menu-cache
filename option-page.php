@@ -110,7 +110,16 @@ class WP_Nav_Menu_Cache_Settings {
 		echo '<h2>WP Nav Menu Cache</h2>';
         $this->settings_api->show_navigation();
         $this->settings_api->show_forms();
-
+			echo '<hr>';
+			echo '<form action="" method="post">'; 
+				if(isset($_POST['delete_nav_menu_cached_files']))
+				{
+					global $WP_Nav_Menu_Cache;
+					$WP_Nav_Menu_Cache->delete_cached_files();
+					echo '<div style="color:#009900">All menu files have been deleted.</div>';
+				}			
+				echo '<input type="submit" name="delete_nav_menu_cached_files" class="button" value="Delete All Menu Cache Files">';
+			echo '</form>';
         echo '</div>';
     }
 

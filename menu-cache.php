@@ -35,6 +35,8 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 			add_filter("wp_nav_menu", array($this, "save_menu"), 100, 2);
 			add_action("wp_update_nav_menu", array($this, "update_cached_nav_menu"), 100, 1);
 			//add_action("wp_update_nav_menu_item", "update_cached_nav_menu", 10, 1);
+			
+			register_activation_hook( __FILE__, array( $this, 'plugin_activate' ) );
 		}
 		
 		/**
@@ -176,13 +178,15 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 			fclose($fp);
 			return $nav_menu;
 		}	
-	
+		
+		public function update_cached_nav_menu(){
+			$this->delete_cached_files();		
+		}
 		/**
 		 *Delete all cached file
 		 **/
 
-		public function update_cached_nav_menu(){
-			//write_log ( "update_cached_nav_menu called" );
+		public function delete_cached_files(){
 				$dir=$this->_cache_dir;	
 				if(file_exists($dir))
 				{
@@ -192,6 +196,10 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 					unlink($file); // delete file
 					}
 				}
+		}
+		
+		public function plugin_activate(){
+			$this->delete_cached_files();	
 		}	
 	
 	
@@ -200,8 +208,4 @@ if(!class_exists('WP_Nav_Menu_Cache')):
 
 endif;
 
-$WP_Nav_Menu_Cache = new WP_Nav_Menu_Cache();
-
-
-
-?>
+$WP_Nav_Menu_Cache = new WP_Nav_Menu_Cache(); //do not rename this var $WP_Nav_Menu_Cache. it is being used in option page.
