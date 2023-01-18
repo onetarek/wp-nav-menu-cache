@@ -5,7 +5,7 @@ Description: Create cache for dynamically generated navigation menu HTML and ser
 Plugin URI: http://onetarek.com/my-wordpress-plugins/wp-nav-menu-cache/
 Author: oneTarek
 Author URI: http://onetarek.com
-Version: 2.1
+Version: 2.2
 */
 
 

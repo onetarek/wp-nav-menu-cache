@@ -4,7 +4,7 @@ Donate link: http://wpadguru.com
 Tags: cache, caching, performance, web performance optimization, wp-cache, page speed, quick cache, cache dynamic menu, navigation menu, wp nav menu, reduce query, static menu, wordpress optimization tool
 Requires at least: 3.8.0
 Tested up to: 6.1.1
-Stable tag: 2.1
+Stable tag: 2.2
 License: GPLv2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Just Install and activate. So nothing to see after installation. To see result s
 1. Settings Page
 
 == Changelog ==
+= 2.2 =
+* No new change. Just update readme with tested up to WP 4.9.8
+
 = 2.1 =
 * Bug Fix: The option "Cache for Individual URL" was getting set automatically on some sites.
 
@@ -58,6 +61,9 @@ Just Install and activate. So nothing to see after installation. To see result s
 
 
 == Upgrade Notice ==
+= 2.2 =
+* No new change. Just update readme with tested up to WP 4.9.8
+
 = 2.1 =
 * Bug Fix: The option "Cache for Individual URL" was getting set automatically on some sites.
 
